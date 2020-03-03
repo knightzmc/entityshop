@@ -1,9 +1,7 @@
 package me.bristermitten.entityshop.shop
 
-import kotlinx.serialization.Serializable
 
-@Serializable
-class Shops(private val shops: MutableSet<Shop> = HashSet()) : Set<Shop> by shops {
+class Shops(private val shops: MutableSet<Shop>) : Set<Shop> by shops {
 
     fun save(shop: Shop) {
         shops.add(shop)
@@ -11,5 +9,9 @@ class Shops(private val shops: MutableSet<Shop> = HashSet()) : Set<Shop> by shop
 
     fun remove(shop: Shop) {
         shops.remove(shop)
+    }
+
+    fun clear() {
+        shops.clear()
     }
 }

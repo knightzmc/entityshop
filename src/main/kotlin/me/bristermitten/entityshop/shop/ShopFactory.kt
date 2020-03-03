@@ -17,16 +17,16 @@ class ShopFactory(private val entityShop: EntityShop) {
         entity.isCustomNameVisible = true
         entity.isInvulnerable = true
         entity.isVisible = false
+        entity.equipment.helmet = item
+        entity.isSmall = true
 
-        val shop = Shop(
-            buyPrice = MoneyPrice(null, buyPrice, entityShop.vaultMoneyManager),
-            sellPrice = MoneyPrice(null, sellPrice, entityShop.vaultMoneyManager),
+        return Shop(
+            buyPrice = MoneyPrice(null, buyPrice, entityShop.moneyManager),
+            sellPrice = MoneyPrice(null, sellPrice, entityShop.moneyManager),
             location = owner.location,
             item = item,
             entity = ShopEntity(entity),
             owner = owner.uniqueId
         )
-
-        return shop
     }
 }

@@ -1,16 +1,12 @@
 package me.bristermitten.entityshop.price
 
-import kotlinx.serialization.Serializable
 import org.bukkit.entity.Player
 
-typealias KTransient = kotlin.jvm.Transient
-
-@Serializable
-class MoneyPrice(
+data class MoneyPrice(
     override var permission: String? = null,
-    private var amount: Double,
+    var amount: Double,
 
-    @KTransient
+    @Transient
     val moneyManager: MoneyManager
 ) : Price {
 

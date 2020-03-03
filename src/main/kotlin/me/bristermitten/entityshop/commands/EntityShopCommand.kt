@@ -3,13 +3,9 @@ package me.bristermitten.entityshop.commands
 import co.aikar.commands.BaseCommand
 import co.aikar.commands.annotation.*
 import me.bristermitten.entityshop.lang.color
-import me.bristermitten.entityshop.price.MoneyPrice
-import me.bristermitten.entityshop.shop.Shop
-import me.bristermitten.entityshop.shop.ShopEntity
 import me.bristermitten.entityshop.shop.ShopFactory
 import me.bristermitten.entityshop.shop.Shops
-import org.bukkit.entity.ArmorStand
-import org.bukkit.entity.EntityType
+import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack
 import org.bukkit.entity.Player
 
 @CommandAlias("entityshop|eshop|shop")
@@ -30,6 +26,7 @@ class EntityShopCommand(
     fun listShops() {
         currentCommandIssuer.sendMessage("Shops")
         shops.forEach {
+
             currentCommandIssuer.sendMessage(it.toString())
         }
     }
@@ -42,17 +39,20 @@ class EntityShopCommand(
         sellPrice: Double
     ) {
 
-        val entity = player.world.spawnEntity(player.location, EntityType.ARMOR_STAND) as ArmorStand
-
-        entity.customName = "&6&lShop".color()
-        entity.isCustomNameVisible = true
-        entity.isInvulnerable = true
-        entity.isVisible = false
-
         val shop = shopFactory.createMoneyBasedShop(player, buyPrice, sellPrice, player.inventory.itemInMainHand)
         shops.save(shop)
 
         player.sendMessage("&aEntityShop created!".color())
+    }
+
+    @Subcommand("clear")
+    @CommandPermission("entityshop.clear")
+    fun clear() {
+        shops.forEach {
+            it.remove()
+        }
+        shops.clear()
+        currentCommandIssuer.sendMessage("&aShops Cleared!".color())
     }
 }
 
