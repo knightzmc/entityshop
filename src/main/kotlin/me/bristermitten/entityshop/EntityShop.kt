@@ -66,17 +66,8 @@ class EntityShop : JavaPlugin {
         korm = Korm(writer = KormWriter(2, Options.min(SERIALIZE_NULLS)))
         korm.codecBy<World, String>(Bukkit::getWorld) { it?.name }
         korm.codecBy(Bukkit::getEntity) { it?.uniqueId }
-//        korm.codecBy<ItemStack, Map<String, Any>>({
-//            println(it)
-//            ItemStack.deserialize(it)
-//        }) {
-//
-//            mapOf(
-//"type" to it.
-//            )
-//            println(it)
-//            it?.serialize()
-//        }
+//        korm.codecBy(ItemStack::class, ItemStackSerializer)
+        korm.codecBy(ItemStack::deserialize) { it?.serialize() }
         korm.codecBy(::ShopEntity) { it?.entity }
         korm.codecBy(Price::class, PriceCodec)
 

@@ -27,14 +27,18 @@ class MainTests {
             UUID.randomUUID()
         )
         val plugin = MockBukkit.load(EntityShop::class.java)
-        plugin.moneyManager = MockMoneyManager
-        val message = plugin.korm.push(shop)
-        println(message)
-        println(plugin.korm.pull(message, Shop::class))
+//        plugin.moneyManager = MockMoneyManager
+//        val message = plugin.korm.push(shop)
+//        println(message)
+//        println(plugin.korm.pull(message, Shop::class))
 //
 //        plugin.shops.save(shop)
 //
 //        println(shop)
 //        println(Shops.INSTANCE)
+
+        val item = ItemStack(Material.STONE, 3)
+        val itemKorm = plugin.korm.push(item)
+        println(itemKorm)
     }
 }

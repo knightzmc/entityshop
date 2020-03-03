@@ -31,12 +31,12 @@ dependencies {
     implementation 'org.spigotmc:spigot:1.12.2-R0.1-SNAPSHOT'
     implementation "com.github.MilkBowl:VaultAPI:1.7"
 
-    implementation "co.aikar:acf-paper:0.5.0-SNAPSHOT"
+    compile "co.aikar:acf-paper:0.5.0-SNAPSHOT"
 //    implementation "com.sxtanna.korm:Korm:2.0"
-    implementation 'com.github.knightzmc:korm:58e817ac24'
+    compile 'com.github.knightzmc:korm:58e817ac24'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "org.jetbrains.kotlin:kotlin-reflect"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile "org.jetbrains.kotlin:kotlin-reflect"
 
     testCompile 'com.github.knightzmc:MockBukkit:4abde9692da726e0e2cd84089c54b5787154da90'
 }
@@ -58,6 +58,7 @@ shadowJar {
         exclude(dependency('org.jetbrains.kotlin:kotlin-reflect:.*'))
     }
     relocate 'co.aikar.commands', 'me.bristermitten.entityshop.acf'
+    configurations = [project.configurations.compile]
 }
 
 build.dependsOn shadowJar
