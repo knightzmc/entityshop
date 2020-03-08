@@ -2,8 +2,11 @@ package me.bristermitten.entityshop
 
 import co.aikar.commands.PaperCommandManager
 import com.sxtanna.korm.Korm
+import com.sxtanna.korm.base.KormCodec
+import com.sxtanna.korm.data.KormType
 import com.sxtanna.korm.data.option.Options
 import com.sxtanna.korm.data.option.Options.SERIALIZE_NULLS
+import com.sxtanna.korm.reader.KormReader
 import com.sxtanna.korm.writer.KormWriter
 import me.bristermitten.entityshop.commands.CommandConditions
 import me.bristermitten.entityshop.commands.EntityShopCommand
@@ -67,7 +70,22 @@ class EntityShop : JavaPlugin {
         korm.codecBy<World, String>(Bukkit::getWorld) { it?.name }
         korm.codecBy(Bukkit::getEntity) { it?.uniqueId }
 //        korm.codecBy(ItemStack::class, ItemStackSerializer)
-        korm.codecBy(ItemStack::deserialize) { it?.serialize() }
+        korm.codecBy(ItemStack::class, object : KormCodec<ItemStack> {
+            override fun pull(reader: KormReader.ReaderContext, types: MutableList<KormType>): ItemStack? {
+                val map = types.map {
+                    val key = it.asBase()?.key?.asString() ?: return@map null
+                    val data = it.asBase()?.data ?: return@map null
+                    key to data
+                }.filterNotNull().toMap()
+                return ItemStack.deserialize(map)
+            }
+
+            override fun push(writer: KormWriter.WriterContext, data: ItemStack?) {
+                val map: Map<String, Any> = data?.serialize() ?: emptyMap()
+                writer.writeHash(map as Map<Any?, Any?>)
+            }
+
+        })
         korm.codecBy(::ShopEntity) { it?.entity }
         korm.codecBy(Price::class, PriceCodec)
 
@@ -78,7 +96,7 @@ class EntityShop : JavaPlugin {
         if (shopsFile.exists()) {
             try {
                 val text = shopsFile.readText()
-                shopSet = korm.pull(text).toList<Shop>().toMutableSet()
+                shopSet = korm.pull(text).toListRef<Shop>().toMutableSet()
             } catch (e: IllegalStateException) {
                 logger.log(Level.WARNING, "Could not deserialize shops", e)
             }

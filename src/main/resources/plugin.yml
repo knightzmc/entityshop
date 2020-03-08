@@ -1,4 +1,4 @@
 name: EntityShop
 main: me.bristermitten.entityshop.EntityShop
 version: "1.0"
-api-version: "1.12"
+api-version: "1.13"

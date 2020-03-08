@@ -32,8 +32,8 @@ dependencies {
     implementation "com.github.MilkBowl:VaultAPI:1.7"
 
     compile "co.aikar:acf-paper:0.5.0-SNAPSHOT"
-//    implementation "com.sxtanna.korm:Korm:2.0"
-    compile 'com.github.knightzmc:korm:58e817ac24'
+    compile "com.sxtanna.korm:Korm:2.1"
+//    compile 'com.github.knightzmc:korm:58e817ac24'
 
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     compile "org.jetbrains.kotlin:kotlin-reflect"
@@ -56,9 +56,15 @@ compileJava {
 shadowJar {
     minimize {
         exclude(dependency('org.jetbrains.kotlin:kotlin-reflect:.*'))
+        exclude(dependency('org.jetbrains.kotlin:kotlin-stdlib-jdk8:.*'))
     }
     relocate 'co.aikar.commands', 'me.bristermitten.entityshop.acf'
     configurations = [project.configurations.compile]
 }
 
+task copy(type: Copy) {
+    from 'build/libs/entityshop-1.0-SNAPSHOT-all.jar'
+    into 'spigot/plugins'
+
+}
 build.dependsOn shadowJar
