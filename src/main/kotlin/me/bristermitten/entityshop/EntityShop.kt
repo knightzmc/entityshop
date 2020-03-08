@@ -10,6 +10,7 @@ import com.sxtanna.korm.reader.KormReader
 import com.sxtanna.korm.writer.KormWriter
 import me.bristermitten.entityshop.commands.CommandConditions
 import me.bristermitten.entityshop.commands.EntityShopCommand
+import me.bristermitten.entityshop.listener.ShopListener
 import me.bristermitten.entityshop.price.MoneyManager
 import me.bristermitten.entityshop.price.Price
 import me.bristermitten.entityshop.price.VaultMoneyManager
@@ -30,7 +31,6 @@ import java.util.logging.Level
 
 
 class EntityShop : JavaPlugin {
-
 
     private lateinit var shops: Shops
 
@@ -63,6 +63,8 @@ class EntityShop : JavaPlugin {
 
         loadShops()
         loadCommands()
+
+        Bukkit.getPluginManager().registerEvents(ShopListener(shops), this)
     }
 
     private fun loadShops() {
@@ -82,6 +84,7 @@ class EntityShop : JavaPlugin {
 
             override fun push(writer: KormWriter.WriterContext, data: ItemStack?) {
                 val map: Map<String, Any> = data?.serialize() ?: emptyMap()
+                @Suppress("UNCHECKED_CAST")
                 writer.writeHash(map as Map<Any?, Any?>)
             }
 
